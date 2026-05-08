@@ -12,9 +12,9 @@
 
 require('dotenv').config();
 const mongoose = require('mongoose');
-const Admin      = require('./models/Admin');
-const Category   = require('./models/Category');
-const MenuItem   = require('./models/MenuItem');
+const Admin = require('./models/Admin');
+const Category = require('./models/Category');
+const MenuItem = require('./models/MenuItem');
 const BuffetInfo = require('./models/BuffetInfo');
 const ShopConfig = require('./models/ShopConfig');
 
@@ -36,9 +36,9 @@ async function seed() {
   console.log('✅ Connected to MongoDB:', MONGODB_URI);
 
   // ── 1. Admin Account ────────────────────────────────────
-  const adminEmail    = process.env.ADMIN_EMAIL    || 'admin@tiemoc.vn';
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@tiemoc.vn';
   const adminPassword = process.env.ADMIN_PASSWORD || 'TiemOc@2026!';
-  const adminName     = process.env.ADMIN_NAME     || 'Admin';
+  const adminName = process.env.ADMIN_NAME || 'Admin';
 
   const existingAdmin = await Admin.findOne({ email: adminEmail });
   if (existingAdmin) {
@@ -51,11 +51,16 @@ async function seed() {
   // ── 2. Categories ────────────────────────────────────────
   const categoryData = [
     { name: 'Món best seller', order: 0 },
-    { name: 'Ốc mít',          order: 1 },
-    { name: 'Ốc hương',        order: 2 },
-    { name: 'Tôm',             order: 3 },
-    { name: 'Ngao & Sò',       order: 4 },
-    { name: 'Món khác',        order: 5 },
+    { name: 'Món must try', order: 1 },
+    { name: 'Ốc mít', order: 2 },
+    { name: 'Ốc hương', order: 3 },
+    { name: 'Ốc', order: 4 },
+    { name: 'Tôm', order: 5 },
+    { name: 'Ngao & Sò', order: 6 },
+    { name: 'Hàu', order: 7 },
+    { name: 'Gà', order: 8 },
+    { name: 'Món khác', order: 9 },
+    { name: 'Món ăn vặt', order: 10 },
   ];
 
   const categoryMap = {};
@@ -74,78 +79,44 @@ async function seed() {
 
   // ── 3. Menu Items (từ hardcoded data hiện tại) ──────────
   const menuItems = [
-    {
-      name: 'Tôm chanh leo',
-      description: 'Món có vị chua nhẹ của chanh leo',
-      price: 150000,
-      categoryName: 'Tôm',
-      isSignature: true, isMustTry: false,
-      imageUrl: '/placeholder-tom-chanh-leo.jpg',
-    },
-    {
-      name: 'Ốc hương trứng muối',
-      description: 'Sốt trứng muối đậm đà rất hợp với bánh mì',
-      price: 160000,
-      categoryName: 'Ốc hương',
-      isSignature: true, isMustTry: true,
-      imageUrl: '/placeholder-oc-huong-trung-muoi.jpg',
-    },
-    {
-      name: 'Tôm bỏ lò phô mai',
-      description: 'Sự hòa quyện của tôm và phô mai béo ngậy',
-      price: 150000,
-      categoryName: 'Tôm',
-      isSignature: true, isMustTry: true,
-      imageUrl: '/placeholder-tom-pho-mai.jpg',
-    },
-    {
-      name: 'Cút lộn xào me',
-      description: 'Sự kết hợp hoàn hảo của sốt me, dừa và trứng cút',
-      price: 50000,
-      categoryName: 'Món best seller',
-      isSignature: true, isMustTry: true, isBestSeller: true,
-      imageUrl: '/placeholder-cut-lon-xao-me.jpg',
-    },
-    {
-      name: 'Hàu nướng mỡ hành',
-      description: 'Hàu sữa tươi béo ngậy nướng mỡ hành thơm nức',
-      price: 120000,
-      categoryName: 'Ngao & Sò',
-      isSignature: false, isMustTry: true,
-      imageUrl: '/placeholder-hau-nuong.jpg',
-    },
-    {
-      name: 'Ngao hấp sả',
-      description: 'Ngao hai vòi tươi ngon hấp sả ớt cay nồng',
-      price: 80000,
-      categoryName: 'Ngao & Sò',
-      isSignature: false, isMustTry: true,
-      imageUrl: '/placeholder-ngao-hap-sa.jpg',
-    },
-    {
-      name: 'Sò huyết rang me',
-      description: 'Sò huyết tươi rang me chua ngọt đậm đà',
-      price: 90000,
-      categoryName: 'Ngao & Sò',
-      isSignature: false, isMustTry: true,
-      imageUrl: '/placeholder-so-huyet-rang-me.jpg',
-    },
-    {
-      name: 'Cơm rang hải sản',
-      description: 'Cơm rang với hải sản tươi ngon',
-      price: 70000,
-      categoryName: 'Món khác',
-      isSignature: false, isMustTry: true,
-      imageUrl: '/placeholder-com-rang-hai-san.jpg',
-    },
-    {
-      name: 'Gỏi đu đủ tôm nõn',
-      description: 'Gỏi đu đủ xanh chua ngọt kết hợp tôm nõn',
-      price: 65000,
-      categoryName: 'Món khác',
-      isSignature: false, isMustTry: true,
-      imageUrl: '/placeholder-goi-du-du.jpg',
-    },
+    // NHÓM ỐC HƯƠNG & ỐC KHÁC
+    { name: 'Ốc hương hấp sả', categoryName: 'Ốc hương', price: 150000, isSignature: false },
+    { name: 'Ốc hương sốt me', categoryName: 'Ốc hương', price: 150000, isSignature: false },
+    { name: 'Ốc hương trứng muối', categoryName: 'Ốc hương', price: 160000, isSignature: true, isMustTry: true },
+    { name: 'Ốc len sữa dừa', categoryName: 'Ốc', price: 120000, isSignature: false },
+    { name: 'Ốc mít hấp sả', categoryName: 'Ốc', price: 100000, isSignature: false },
+    { name: 'Ốc mít rang sả', categoryName: 'Ốc', price: 100000, isSignature: false },
+    { name: 'Ốc mắm tắc', categoryName: 'Ốc', price: 110000, isSignature: false },
+
+    // NHÓM NGAO & SÒ
+    { name: 'Ngao trắng hấp Thái', categoryName: 'Ngao & Sò', price: 80000, isMustTry: true },
+    { name: 'Ngao trắng sốt me', categoryName: 'Ngao & Sò', price: 85000, isSignature: false },
+    { name: 'Ngao trắng sốt trứng muối', categoryName: 'Ngao & Sò', price: 95000, isSignature: false },
+    { name: 'Ngao trắng sữa dừa', categoryName: 'Ngao & Sò', price: 90000, isSignature: false },
+    { name: 'Ngao sần xào ngô hành', categoryName: 'Ngao & Sò', price: 85000, isSignature: false },
+    { name: 'Sò huyết cháy tỏi', categoryName: 'Ngao & Sò', price: 90000, isMustTry: true },
+    { name: 'Sò huyết sả ớt', categoryName: 'Ngao & Sò', price: 90000, isSignature: false },
+    { name: 'Móng tay sốt cháy tỏi', categoryName: 'Ngao & Sò', price: 110000, isSignature: false },
+
+    // NHÓM TÔM & HÀU
+    { name: 'Tôm bỏ lò phô mai', categoryName: 'Tôm', price: 150000, isSignature: true, isMustTry: true },
+    { name: 'Tôm nướng sa tế', categoryName: 'Tôm', price: 150000, isSignature: false },
+    { name: 'Miến tôm tay cầm', categoryName: 'Tôm', price: 165000, isSignature: true },
+    { name: 'Hàu nướng mỡ hành', categoryName: 'Hàu', price: 120000, isMustTry: true },
+    { name: 'Hàu nướng phô mai', categoryName: 'Hàu', price: 130000, isSignature: false },
+    { name: 'Cháo hàu', categoryName: 'Hàu', price: 65000, isSignature: false },
+
+    // NHÓM GÀ & MÓN ĂN KÈM
+    { name: 'Gà ủ muối hoa tiêu', categoryName: 'Gà', price: 180000, isSignature: false },
+    { name: 'Gà ủ xì dầu', categoryName: 'Gà', price: 185000, isSignature: false },
+    { name: 'Chân gà sả tắc', categoryName: 'Gà', price: 85000, isSignature: false },
+    { name: 'Cút lộn xào me', categoryName: 'Món khác', price: 50000, isBestSeller: true, isMustTry: true },
+    { name: 'Cơm rang hải sản', categoryName: 'Món khác', price: 70000, isMustTry: true },
+    { name: 'Gỏi tôm sốt Thái', categoryName: 'Món khác', price: 125000, isSignature: true },
+    { name: 'Nộm nõn đu đủ', categoryName: 'Món khác', price: 65000, isSignature: false },
+    { name: 'Nem chua rán', categoryName: 'Món ăn vặt', price: 55000, isSignature: false },
+    { name: 'Khoai tây chiên', categoryName: 'Món ăn vặt', price: 45000, isSignature: false },
+    { name: 'Bánh mì bơ phô mai', categoryName: 'Món ăn vặt', price: 35000, isSignature: false }
   ];
 
   for (const [i, item] of menuItems.entries()) {
@@ -158,13 +129,13 @@ async function seed() {
     await MenuItem.create({
       name: item.name,
       slug,
-      description: item.description,
+      description: item.description || '',
       price: item.price,
-      image: { url: item.imageUrl, publicId: '' },
+      images: item.imageUrl ? [{ url: item.imageUrl, publicId: '' }] : [],
       categoryId: categoryMap[item.categoryName],
       tags: {
-        isSignature:  !!item.isSignature,
-        isMustTry:    !!item.isMustTry,
+        isSignature: !!item.isSignature,
+        isMustTry: !!item.isMustTry,
         isBestSeller: !!item.isBestSeller,
       },
       order: i,
