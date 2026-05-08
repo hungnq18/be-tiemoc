@@ -16,14 +16,16 @@ const getFromCache = (key) => {
 const setCache = (key, data) => cache.set(key, { data, timestamp: Date.now() });
 
 // Export để controller/admin service có thể clear khi update
-const clearCache = (pattern) => {
-  if (!pattern) {
+const clearCache = (patterns) => {
+  if (!patterns) {
     cache.clear();
     return;
   }
-  // Xóa các key bắt đầu bằng pattern
+  const patternList = Array.isArray(patterns) ? patterns : [patterns];
+  
   for (const key of cache.keys()) {
-    if (key.startsWith(pattern)) {
+    const shouldDelete = patternList.some(p => key.startsWith(p));
+    if (shouldDelete) {
       cache.delete(key);
     }
   }
@@ -77,8 +79,12 @@ class CategoryService {
 class MenuItemService {
   async getAll({ categorySlug, tag, page = 1, limit = 10, includeInactive = false } = {}) {
     const cacheKey = `menu-${categorySlug || ''}-${tag || ''}-${page}-${limit}-${includeInactive}`;
-    const cached = getFromCache(cacheKey);
-    if (cached) return { data: cached, cached: true };
+    
+    // Nếu là admin (includeInactive = true), bỏ qua cache để luôn lấy dữ liệu mới nhất
+    if (!includeInactive) {
+      const cached = getFromCache(cacheKey);
+      if (cached) return { data: cached, cached: true };
+    }
 
     const filter = {};
     if (!includeInactive) filter.isActive = true;
