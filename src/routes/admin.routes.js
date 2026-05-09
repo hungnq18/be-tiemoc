@@ -11,9 +11,11 @@ router.get('/auth/me', auth, authController.getMe);
 router.put('/auth/change-password', auth, authController.changePassword);
 
 // ── Categories CRUD ─────────────────────────────────────────
+router.get('/categories', auth, adminController.getCategories);
 router.post('/categories', auth, adminController.createCategory);
 router.put('/categories/:id', auth, adminController.updateCategory);
 router.delete('/categories/:id', auth, adminController.deleteCategory);
+router.post('/categories/reorder', auth, adminController.reorderCategories);
 
 // ── Menu Items CRUD ─────────────────────────────────────────
 router.post('/menu-items', auth, adminController.createMenuItem);

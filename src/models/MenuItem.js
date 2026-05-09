@@ -47,7 +47,7 @@ const slugify = (text) => {
 };
 
 MenuItemSchema.pre('validate', function() {
-  if (!this.slug && this.name) {
+  if (this.name && (this.isModified('name') || !this.slug)) {
     this.slug = slugify(this.name);
   }
 });

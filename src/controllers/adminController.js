@@ -1,6 +1,14 @@
 const { categoryService, menuItemService, buffetService, shopConfigService } = require('../services/contentService');
 
 // ── Categories ──────────────────────────────────────────────────────────────
+exports.getCategories = async (req, res, next) => {
+  try {
+    const result = await categoryService.getAll({ includeInactive: true });
+    // Bỏ qua cache cho admin
+    res.json({ success: true, data: result.data });
+  } catch (err) { next(err); }
+};
+
 exports.createCategory = async (req, res, next) => {
   try {
     const data = await categoryService.create(req.body);
@@ -19,6 +27,13 @@ exports.deleteCategory = async (req, res, next) => {
   try {
     await categoryService.delete(req.params.id);
     res.json({ success: true, message: 'Xóa danh mục thành công' });
+  } catch (err) { next(err); }
+};
+
+exports.reorderCategories = async (req, res, next) => {
+  try {
+    await categoryService.reorder(req.body.orderedIds);
+    res.json({ success: true, message: 'Sắp xếp danh mục thành công' });
   } catch (err) { next(err); }
 };
 
