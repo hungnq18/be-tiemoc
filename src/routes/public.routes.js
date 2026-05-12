@@ -15,15 +15,15 @@ const withCache = (seconds) => (req, res, next) => {
 };
 
 // GET /api/public/categories
-router.get('/categories', withCache(600), publicController.getCategories);
+router.get('/categories', withCache(60), publicController.getCategories);
 
 // GET /api/public/menu-items
-router.get('/menu-items', withCache(300), publicController.getMenuItems);
+router.get('/menu-items', withCache(60), publicController.getMenuItems);
 
 // GET /api/public/buffet
-router.get('/buffet', withCache(600), publicController.getBuffet);
+router.get('/buffet', withCache(60), publicController.getBuffet);
 
 // GET /api/public/shop-config
-router.get('/shop-config', withCache(1800), publicController.getShopConfig);
+router.get('/shop-config', withCache(60), publicController.getShopConfig);
 
 module.exports = router;

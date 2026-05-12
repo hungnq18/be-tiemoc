@@ -232,12 +232,28 @@ class MenuItemService {
       const item = await MenuItem.findById(id);
       if (!item) { const e = new Error('Món ăn không tồn tại'); e.status = 404; throw e; }
       
-      // Update fields
-      Object.assign(item, payload);
+      // Explicitly update fields to ensure Mongoose detects changes
+      if (payload.name) item.name = payload.name;
+      if (payload.description !== undefined) item.description = payload.description;
+      if (payload.price !== undefined) item.price = payload.price;
+      if (payload.categoryId) item.categoryId = payload.categoryId;
+      if (payload.tags) item.tags = { ...payload.tags };
+      if (payload.isActive !== undefined) item.isActive = payload.isActive;
+      if (payload.order !== undefined) item.order = payload.order;
+      
+      // Quan trọng: Cập nhật mảng ảnh
+      if (payload.images) {
+        console.log('Updating images for item', id, ':', payload.images);
+        item.images = payload.images;
+        item.markModified('images');
+        // Đảm bảo không còn vướng mắc với trường image cũ
+        item.set('image', undefined);
+      }
 
-      await item.save();
-      clearCache('menu');
-      return item;
+      const savedItem = await item.save();
+      console.log('Item saved successfully. Images in DB:', savedItem.images);
+      clearCache(['menu', 'categories']); // Xóa cả cache menu và category để đồng bộ
+      return savedItem;
     } catch (err) {
       if (err.code === 11000) {
         const e = new Error('Tên món ăn hoặc slug đã tồn tại');

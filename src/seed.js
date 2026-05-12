@@ -176,6 +176,10 @@ async function seed() {
       phone: '033 375 2829',
       openTime: '10:00',
       closeTime: '22:00',
+      morningOpenTime: '10:00',
+      morningCloseTime: '14:00',
+      afternoonOpenTime: '16:00',
+      afternoonCloseTime: '22:00',
       socialLinks: {
         tiktok: 'https://www.tiktok.com/@tiemoccohanh',
       },

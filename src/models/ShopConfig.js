@@ -14,6 +14,10 @@ const ShopConfigSchema = new mongoose.Schema(
     email: { type: String, default: '' },
     openTime: { type: String, default: '10:00' },
     closeTime: { type: String, default: '22:00' },
+    morningOpenTime: { type: String, default: '10:00' },
+    morningCloseTime: { type: String, default: '14:00' },
+    afternoonOpenTime: { type: String, default: '16:00' },
+    afternoonCloseTime: { type: String, default: '22:00' },
     socialLinks: {
       facebook:  { type: String, default: '' },
       tiktok:    { type: String, default: 'https://www.tiktok.com/@tiemoccohanh' },
